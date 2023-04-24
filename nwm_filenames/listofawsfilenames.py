@@ -34,6 +34,7 @@ type = [
     ".LAKEOUT_DOMAIN1.comp",
     ".LDASOUT_DOMAIN1.comp",
     ".RTOUT_DOMAIN1.comp"
+    ".LDASIN_DOMAIN1.comp"
 ]
 objecttype = [
     "forcing/",
@@ -85,10 +86,10 @@ def makename2(
     datetxt = f"{date.strftime('%Y%m%d%H')}"
     urlbase_prefix = urlbase_prefix + objecttype[object_type - 1]
 
-    if yeartxt == "2020":
-        url = f"{urlbase_prefix}{yeartxt}/{datetxt}00{type[typeinput - 1]}"
-    else:
+    if typeinput == 6:
         url = f"{urlbase_prefix}{yeartxt}/{datetxt}00.LDASIN_DOMAIN1"
+    else:
+        url = f"{urlbase_prefix}{yeartxt}/{datetxt}00{type[typeinput - 1]}"
 
     # Check if the link exists
     response = requests.head(url)
@@ -232,9 +233,9 @@ def create_file_list(
     except:
         urlbase_prefix = "urlbase_error"
 
-    valid_types = [1, 2, 3, 4, 5]
+    valid_types = [1, 2, 3, 4, 5, 6]
     if not all(x in valid_types for x in type):
-        raise ValueError("Invalid type input. Type can be any combination of [1, 2, 3, 4, 5].")
+        raise ValueError("Invalid type input. Type can be any combination of [1, 2, 3, 4, 5, 6].")
 
     r = []
     if urlbaseinput != 6:
@@ -475,8 +476,8 @@ def create_file_list(
     return r,len(r)
 
 def main():
-    start_date = "20200101"
-    end_date = "20200102"
+    start_date = "19790201"
+    end_date = "19790202"
     fcst_cycle = [12, 18]
     lead_time = [1, 2, 240]
     # fcst_cycle = None  # Retrieves a full day for each day within the range given.
@@ -486,9 +487,9 @@ def main():
     meminput = 1
     urlbaseinput = 6
     start_time = "0000"
-    end_time = "0600"
-    type_input = [5]
-    object_type = 1,2
+    end_time = "0800"
+    type_input = [5,6]
+    object_type = 1
     try:
         file_list,length = create_file_list(
             runinput,
