@@ -54,6 +54,8 @@ def makename(
     run_typesuffix="",
     urlbase_prefix="",
 ):
+    """This function handles preprocessed text and converts it into the applicable url to access the appropriate file."""
+
     datetxt = f"nwm.{date.strftime('%Y%m%d')}"
     foldertxt = f"{run_type}{run_typesuffix}"
     filetxt = f"nwm.t{fcst_cycle:02d}z.{run_name}{runsuffix}.{var_name}{varsuffix}.{fhprefix}{fcst_hour:03d}.{geography}.nc"
@@ -62,6 +64,8 @@ def makename(
 
 # setting run_type
 def run_type(runinput, varinput, geoinput, default=""):
+    """This function takes the numeric command line input and converts to the text used in the url."""
+
     if varinput == 5:  # if forcing
         if runinput == 5 and geoinput == 2:  # if analysis_assim and hawaii
             return "forcing_analysis_assim_hawaii"
@@ -160,7 +164,7 @@ def create_file_list(
     urlbaseinput=None,
     lead_time=None,  # TODO: change this order; placed here to avoid breaking change
 ):
-    # for given date,  run, var, fcst_cycle, and geography, print file names for the valid time (the range of fcst_hours) and dates
+    """ for given date,  run, var, fcst_cycle, and geography, print file names for the valid time (the range of fcst_hours) and dates"""
 
     runsuff = ""
 
@@ -189,11 +193,7 @@ def create_file_list(
         _dtstart = today
         _until = today
 
-    dates = rrule.rrule(
-        rrule.DAILY,
-        dtstart=_dtstart,
-        until=_until,
-    )
+    dates = rrule.rrule(rrule.DAILY, dtstart=_dtstart, until=_until,)
     run_t = run_type(runinput, varinput, geoinput, run_name)
     fhp = fhprefix(runinput)
     vsuff = varsuffix(meminput)
